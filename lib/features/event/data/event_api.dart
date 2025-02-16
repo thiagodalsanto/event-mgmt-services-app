@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:calendar_mgmt_services_app/features/event/enum/event_filter.dart';
-import 'package:calendar_mgmt_services_app/features/event/models/evet_location.dart';
+import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import '../models/event.dart';
@@ -18,13 +18,14 @@ class EventApi {
     dio.options.baseUrl = _baseUrl;
   }
 
-  Future<List<Event>> getEventsByLocation(String location,
+  Future<List<Event>> getEventsByLocation(Location location,
       {List<EventFilter>? filters}) async {
     final params = {
       'q': 'events',
       'google_domain': 'google.com',
       'api_key': _apiKey,
-      'location': location,
+      'location': location.id,
+      'engine': 'google_events',
       'htichips': filters?.map((filter) => filter.value).join(','),
     };
 
@@ -35,7 +36,11 @@ class EventApi {
 
       if (response.statusCode == 200) {
         final data = response.data['events_results'] as List;
-        return data.map((event) => Event.fromJson(event)).toList();
+        return data.map((event) {
+          final eventObj = Event.fromJson(event);
+          eventObj.setCoordinates(location);
+          return eventObj;
+        }).toList();
       } else {
         throw Exception('Falha ao carregar eventos');
       }
@@ -93,7 +98,7 @@ class EventApi {
   Future<List<Location>> getLocationListByJson() async {
     try {
       // Load the JSON file from assets
-      String jsonString = await rootBundle.loadString('assets/locations.json');
+      String jsonString = await rootBundle.loadString('lib/assets/locations.json');
 
       // Decode JSON into a List
       List<dynamic> jsonList = json.decode(jsonString);

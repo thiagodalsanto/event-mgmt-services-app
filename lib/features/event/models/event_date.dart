@@ -16,4 +16,13 @@ class EventDate {
       when: json['when'],
     );
   }
+
+  @override
+  String toString() {
+    String formattedDate = DateFormat('MMM dd, yyyy').format(start);
+    return 'EventDate{\n'
+        '  Start: $formattedDate,\n'
+        '  When: $when\n'
+        '}';
+  }
 }
