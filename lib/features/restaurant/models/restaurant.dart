@@ -1,5 +1,6 @@
 import 'package:calendar_mgmt_services_app/features/restaurant/models/business_hours.dart';
 import 'package:calendar_mgmt_services_app/features/restaurant/models/restaurant_location.dart';
+import 'package:flutter/foundation.dart';
 
 class Restaurant {
   final String name;
@@ -27,25 +28,23 @@ class Restaurant {
   static Future<Restaurant> fromJson(Map<String, dynamic> json) async {
     // Handle location first since it's an async operation
     try {
-      RestaurantLocation location =
-          await RestaurantLocation.fromJson(json['location']);
+      RestaurantLocation location = await RestaurantLocation.fromJson(json['location']);
 
       // Set coordinates if available
       if (json['coordinates'] != null) {
-        location.setCoordinates(json['coordinates']['latitude'] as double,
-            json['coordinates']['longitude'] as double);
+        location.setCoordinates(
+            json['coordinates']['latitude'] as double, json['coordinates']['longitude'] as double);
       }
 
       // Extract categories titles into a list
-      List<String> categories = (json['categories'] as List)
-          .map((category) => category['title'] as String)
-          .toList();
+      List<String> categories =
+          (json['categories'] as List).map((category) => category['title'] as String).toList();
 
       // Get the first business hours entry and its first open slot
       // Assuming the first entry is the regular hours
       List<dynamic> businessHours = [];
       List<BusinessHours> hours = [];
-      if(json['business_hours'] != null && json['business_hours'].length > 0){
+      if (json['business_hours'] != null && json['business_hours'].length > 0) {
         businessHours = json['business_hours'][0]['open'];
         hours = businessHours.map((hour) => BusinessHours.fromJson(hour)).toList();
       }
@@ -62,7 +61,9 @@ class Restaurant {
         menuUrl: json['attributes']?['menu_url'] as String? ?? '',
       );
     } catch (e) {
-      print('Error parsing Restaurant: $e');
+      if (kDebugMode) {
+        print('Error parsing Restaurant: $e');
+      }
       rethrow;
     }
   }

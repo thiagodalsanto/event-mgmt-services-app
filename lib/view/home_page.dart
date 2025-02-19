@@ -1,3 +1,7 @@
+import 'package:calendar_mgmt_services_app/core/services/geo_location_service.dart';
+import 'package:calendar_mgmt_services_app/features/event/models/event.dart';
+import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
+import 'package:calendar_mgmt_services_app/features/event/service/event_service.dart';
 import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
 import 'package:calendar_mgmt_services_app/shared/components/cards/current_location.dart';
 import 'package:calendar_mgmt_services_app/shared/components/cards/event_card.dart';
@@ -5,6 +9,7 @@ import 'package:calendar_mgmt_services_app/shared/components/cards/main_event_ca
 import 'package:calendar_mgmt_services_app/shared/components/header/header.dart';
 import 'package:calendar_mgmt_services_app/shared/components/textfields/location_search_bar.dart';
 import 'package:calendar_mgmt_services_app/shared/components/texts/section_title.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,11 +23,58 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final FocusNode _searchFocusNode = FocusNode();
   final TextEditingController _searchController = TextEditingController();
+  List<Event> events = [];
+  bool isLoading = true;
+  String currentLocationName = "";
 
   @override
   void initState() {
     super.initState();
+    _fetchEvents();
     _searchFocusNode.unfocus();
+  }
+
+  Future<void> _fetchEvents({String? searchQuery}) async {
+    try {
+      final eventService = EventService();
+      await GeoLocationService.requestPermission();
+      Location? location;
+
+      if (searchQuery != null && searchQuery.isNotEmpty) {
+        final locations = await eventService.getLocationsByJson();
+        location = locations.firstWhere(
+          (loc) => loc.name.toLowerCase().contains(searchQuery.toLowerCase()),
+          orElse: () => Location(
+            id: '',
+            name: '',
+            latitude: 0.0,
+            longitude: 0.0,
+            canonicalName: '',
+            countryCode: '',
+            targetType: '',
+            reach: 0,
+          ),
+        );
+      } else if (await GeoLocationService.userPermittedGeoLocation()) {
+        events = await eventService.getEventsByGeoLocation();
+      } else {
+        final locations = await eventService.getLocationsByJson();
+        location = locations.firstWhere((loc) => loc.id == '585069abee19ad271e9b727d');
+      }
+
+      if (location != null && location.id.isNotEmpty) {
+        events = await eventService.getEventsByLocation(location);
+        currentLocationName = location.name;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Erro ao buscar eventos: $e');
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -37,20 +89,7 @@ class HomePageState extends State<HomePage> {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
 
-    final List<Map<String, String>> eventosRecomendados = [
-      {
-        'titulo': 'Evento 1',
-        'descricao': 'Descubra experiências únicas e incríveis neste evento especial.',
-        'imagem':
-            'https://static.vecteezy.com/system/resources/thumbnails/049/462/195/small/inspiring-woman-leading-a-technology-seminar-with-enthusiasm-and-confidence-in-front-of-a-large-audience-photo.jpeg',
-      },
-      {
-        'titulo': 'Evento 2',
-        'descricao': 'Um encontro inesquecível para amantes da música e cultura.',
-        'imagem':
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEzBgvtI2s4JmDlX9HMxum6cs7LJAwb4iA0w&s',
-      },
-    ];
+    print(events);
 
     return Scaffold(
       body: Container(
@@ -75,52 +114,71 @@ class HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 20),
                 LocationSearchBar(
-                  focusNode: _searchFocusNode,
-                  controller: _searchController,
-                ),
+                    focusNode: _searchFocusNode,
+                    controller: _searchController,
+                    onFieldSubmitted: (value) {
+                      _fetchEvents(searchQuery: value);
+                    }),
                 const SizedBox(height: 10),
-                CurrentLocation(location: user.localization),
+                CurrentLocation(location: currentLocationName),
                 const SizedBox(height: 20),
-                MainEventCard(
-                  titulo: 'Título do Evento Principal',
-                  imagem:
-                      'https://static.vecteezy.com/ti/fotos-gratis/t2/52948518-vermelho-tapete-evento-com-convidados-esperando-atras-veludo-cordas-dentro-uma-escuro-local-foto.jpeg',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/event-details', arguments: {
-                      'titulo': 'Título do Evento Principal',
-                      'descricao': 'Uma experiência única espera por você neste evento especial!',
-                      'imagem':
-                          'https://static.vecteezy.com/ti/fotos-gratis/t2/52948518-vermelho-tapete-evento-com-convidados-esperando-atras-veludo-cordas-dentro-uma-escuro-local-foto.jpeg',
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                const SectionTitle(title: "Eventos Recomendados"),
-                Expanded(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: eventosRecomendados.length,
-                    itemBuilder: (context, index) {
-                      final evento = eventosRecomendados[index];
-                      return EventCard(
-                        titulo: evento['titulo']!,
-                        descricao: evento['descricao']!,
-                        imagem: evento['imagem']!,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/event-details',
-                            arguments: {
-                              'titulo': evento['titulo']!,
-                              'descricao': evento['descricao']!,
-                              'imagem': evento['imagem']!,
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : events.isNotEmpty
+                        ? Expanded(
+                            child: Column(
+                              children: [
+                                MainEventCard(
+                                  titulo: events[0].title,
+                                  imagem: events[0].thumbnail,
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/event-details', arguments: {
+                                      'titulo': events[0].title,
+                                      'descricao': events[0].date.when,
+                                      'imagem': events[0].thumbnail,
+                                      'endereco': events[0].address.join(', '),
+                                      'link': events[0].link,
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                const SectionTitle(title: "Eventos Recomendados"),
+                                Expanded(
+                                  child: ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: events.length - 1,
+                                    itemBuilder: (context, index) {
+                                      final evento = events[index + 1];
+                                      return EventCard(
+                                        titulo: evento.title,
+                                        descricao: evento.date.when,
+                                        imagem: evento.thumbnail,
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            '/event-details',
+                                            arguments: {
+                                              'titulo': evento.title,
+                                              'descricao': evento.date.when,
+                                              'imagem': evento.thumbnail,
+                                              'endereco': evento.address.join(', '),
+                                              'link': evento.link,
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const Center(
+                            child: Text(
+                              "Nenhum evento encontrado",
+                              style: TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
               ],
             ),
           ),

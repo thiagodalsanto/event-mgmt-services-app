@@ -1,6 +1,7 @@
 import 'package:calendar_mgmt_services_app/core/models/iso_country.dart';
 import 'package:calendar_mgmt_services_app/core/models/iso_division.dart';
 import 'package:calendar_mgmt_services_app/core/services/iso_country_service.dart';
+import 'package:flutter/foundation.dart';
 
 class RestaurantLocation {
   final String address;
@@ -28,12 +29,9 @@ class RestaurantLocation {
 
   static Future<RestaurantLocation> fromJson(Map<String, dynamic> json) async {
     try {
-      List<IsoCountry> countries =
-          await IsoCountryService().getCountriesByIso();
-      IsoCountry country =
-          countries.firstWhere((c) => c.code == json['country']);
-      IsoDivision division =
-          country.divisions.firstWhere((d) => d.code == json['state']);
+      List<IsoCountry> countries = await IsoCountryService().getCountriesByIso();
+      IsoCountry country = countries.firstWhere((c) => c.code == json['country']);
+      IsoDivision division = country.divisions.firstWhere((d) => d.code == json['state']);
 
       String address;
       if (json["address1"] != null && json["address1"] != "") {
@@ -54,7 +52,9 @@ class RestaurantLocation {
         city: json['city'] as String,
       );
     } catch (e) {
-      print('Error parsing RestaurantLocation: $e');
+      if (kDebugMode) {
+        print('Error parsing RestaurantLocation: $e');
+      }
       rethrow;
     }
   }

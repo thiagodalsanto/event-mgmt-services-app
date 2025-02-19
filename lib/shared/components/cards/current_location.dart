@@ -14,12 +14,16 @@ class CurrentLocation extends StatelessWidget {
       children: [
         const Icon(Icons.my_location, color: Colors.white, size: 20),
         const SizedBox(width: 8),
-        Text(
-          "Localização Atual: $location",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+        SizedBox(
+          width: MediaQuery.of(context).size.width - 70,
+          child: Text(
+            "Localização Atual: $location",
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
         ),
       ],

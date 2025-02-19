@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPasswordVisible;
   final String? Function(String?)? validator;
   final VoidCallback? onPasswordVisibilityChanged;
+  final Function(String)? onFieldSubmitted;
 
   const CustomTextField({
     super.key,
@@ -22,11 +23,13 @@ class CustomTextField extends StatelessWidget {
     this.isReadOnly = false,
     this.isPasswordVisible = false,
     this.onPasswordVisibilityChanged,
+    this.onFieldSubmitted,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onFieldSubmitted: onFieldSubmitted,
       controller: controller,
       focusNode: focusNode,
       validator: validator,
