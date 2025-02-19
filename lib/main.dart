@@ -1,14 +1,23 @@
-import 'package:calendar_mgmt_services_app/res/theme/theme_manager.dart';
-import 'package:calendar_mgmt_services_app/res/theme/themes.dart';
-import 'package:calendar_mgmt_services_app/view/my_home_page.dart';
+import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
+import 'routes/app_routes.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeManager(),
-    child: const MyApp(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  await Hive.openBox('users');
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,13 +25,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeManager = Provider.of<ThemeManager>(context);
-
     return MaterialApp(
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      themeMode: themeManager.themeMode,
-      home: const MyHomePage(title: 'Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRoutes.generateRoute,
     );
   }
 }
