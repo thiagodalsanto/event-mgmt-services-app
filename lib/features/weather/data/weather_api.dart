@@ -17,6 +17,7 @@ class WeatherApi {
       'lon': longitude,
       'appid': _apiKey,
       'units': 'metric',
+      'lang': 'pt'
     };
 
     return dio.get('', queryParameters: params).then((response) {

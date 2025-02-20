@@ -19,7 +19,7 @@ class RestaurantLocation {
     required this.state,
     required this.city,
     this.latitude = 0.0,
-    this.longitude = 0.0,
+    this.longitude = 0.0, 
   });
 
   setCoordinates(double latitude, double longitude) {
