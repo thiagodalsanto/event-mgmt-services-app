@@ -1,4 +1,4 @@
-import 'package:calendar_mgmt_services_app/features/restaurant/enum/weekday.dart';
+import 'package:event_mgmt_services_app/features/restaurant/enum/weekday.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,5 @@
-import 'package:calendar_mgmt_services_app/features/weather/data/weather_api.dart';
-import 'package:calendar_mgmt_services_app/features/weather/models/weather.dart';
+import 'package:event_mgmt_services_app/features/weather/data/weather_api.dart';
+import 'package:event_mgmt_services_app/features/weather/models/weather.dart';
 
 class WeatherService {
   late WeatherApi _weatherApi;

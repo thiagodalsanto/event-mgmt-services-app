@@ -1,6 +1,6 @@
-import 'package:calendar_mgmt_services_app/core/models/iso_country.dart';
-import 'package:calendar_mgmt_services_app/core/models/iso_division.dart';
-import 'package:calendar_mgmt_services_app/core/services/iso_country_service.dart';
+import 'package:event_mgmt_services_app/core/models/iso_country.dart';
+import 'package:event_mgmt_services_app/core/models/iso_division.dart';
+import 'package:event_mgmt_services_app/core/services/iso_country_service.dart';
 import 'package:flutter/foundation.dart';
 
 class RestaurantLocation {

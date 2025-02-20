@@ -1,8 +1,8 @@
-import 'package:calendar_mgmt_services_app/view/event_details_page.dart';
-import 'package:calendar_mgmt_services_app/view/home_page.dart';
-import 'package:calendar_mgmt_services_app/view/login_page.dart';
-import 'package:calendar_mgmt_services_app/view/personal_data_page.dart';
-import 'package:calendar_mgmt_services_app/view/register_page.dart';
+import 'package:event_mgmt_services_app/view/event_details_page.dart';
+import 'package:event_mgmt_services_app/view/home_page.dart';
+import 'package:event_mgmt_services_app/view/login_page.dart';
+import 'package:event_mgmt_services_app/view/personal_data_page.dart';
+import 'package:event_mgmt_services_app/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'route_names.dart';
 

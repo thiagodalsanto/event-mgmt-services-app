@@ -1,5 +1,5 @@
-name: calendar_mgmt_services_app
-description: "A new Flutter project."
+name: event_mgmt_services_app
+description: "Event App"
 
 publish_to: 'none' 
 

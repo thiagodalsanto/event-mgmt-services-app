@@ -1,4 +1,4 @@
-import 'package:calendar_mgmt_services_app/features/google/data/google_maps.dart';
+import 'package:event_mgmt_services_app/features/google/data/google_maps.dart';
 import 'package:dio/dio.dart';
 
 class GoogleApi {

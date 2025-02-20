@@ -1,7 +1,7 @@
-import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
-import 'package:calendar_mgmt_services_app/shared/components/buttons/custom_elevated_button.dart';
-import 'package:calendar_mgmt_services_app/shared/components/buttons/custom_text_button.dart';
-import 'package:calendar_mgmt_services_app/shared/components/textfields/custom_text_field.dart';
+import 'package:event_mgmt_services_app/providers/user_provider.dart';
+import 'package:event_mgmt_services_app/shared/components/buttons/custom_elevated_button.dart';
+import 'package:event_mgmt_services_app/shared/components/buttons/custom_text_button.dart';
+import 'package:event_mgmt_services_app/shared/components/textfields/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

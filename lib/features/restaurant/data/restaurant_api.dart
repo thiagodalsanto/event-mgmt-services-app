@@ -1,4 +1,4 @@
-import 'package:calendar_mgmt_services_app/features/restaurant/models/restaurant.dart';
+import 'package:event_mgmt_services_app/features/restaurant/models/restaurant.dart';
 import 'package:dio/dio.dart';
 
 class RestaurantApi {
@@ -14,8 +14,7 @@ class RestaurantApi {
     dio.options.headers['Authorization'] = 'Bearer $_apiKey';
   }
 
-  Future<List<Restaurant>> getRestaurantsByLocation(
-      double latitude, double longitude) async {
+  Future<List<Restaurant>> getRestaurantsByLocation(double latitude, double longitude) async {
     final params = {
       'latitude': latitude,
       'longitude': longitude,
@@ -24,16 +23,16 @@ class RestaurantApi {
       'limit': 20,
     };
 
-    try{
+    try {
       final response = await dio.get(_baseUrl, queryParameters: params);
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         final data = response.data['businesses'] as List;
         return Future.wait(data.map((restaurant) => Restaurant.fromJson(restaurant)));
       } else {
         throw Exception('Failed to load restaurants');
       }
-    } catch(e){
+    } catch (e) {
       throw Exception('Failed to load restaurants: $e');
     }
   }

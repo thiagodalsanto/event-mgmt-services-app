@@ -1,5 +1,5 @@
-import 'package:calendar_mgmt_services_app/features/event/models/event_date.dart';
-import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
+import 'package:event_mgmt_services_app/features/event/models/event_date.dart';
+import 'package:event_mgmt_services_app/features/event/models/event_location.dart';
 
 class Event {
   final String title;
@@ -18,7 +18,7 @@ class Event {
     required this.thumbnail,
   });
 
-  setCoordinates(Location location){
+  setCoordinates(Location location) {
     latitude = location.latitude;
     longitude = location.longitude;
   }
@@ -37,7 +37,7 @@ class Event {
   String toString() {
     return 'Event{\n'
         '  title: $title,\n'
-        '  date: ${date.toString()},\n'  // Calls the toString of EventDate here
+        '  date: ${date.toString()},\n' // Calls the toString of EventDate here
         '  address: $address,\n'
         '  link: $link,\n'
         '  thumbnail: $thumbnail,\n'

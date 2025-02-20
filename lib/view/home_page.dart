@@ -1,14 +1,14 @@
-import 'package:calendar_mgmt_services_app/features/event/models/event.dart';
-import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
-import 'package:calendar_mgmt_services_app/features/event/service/event_service.dart';
-import 'package:calendar_mgmt_services_app/providers/event_provider.dart';
-import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
-import 'package:calendar_mgmt_services_app/shared/components/cards/current_location.dart';
-import 'package:calendar_mgmt_services_app/shared/components/cards/event_card.dart';
-import 'package:calendar_mgmt_services_app/shared/components/cards/main_event_card.dart';
-import 'package:calendar_mgmt_services_app/shared/components/header/header.dart';
-import 'package:calendar_mgmt_services_app/shared/components/textfields/location_search_bar.dart';
-import 'package:calendar_mgmt_services_app/shared/components/texts/section_title.dart';
+import 'package:event_mgmt_services_app/features/event/models/event.dart';
+import 'package:event_mgmt_services_app/features/event/models/event_location.dart';
+import 'package:event_mgmt_services_app/features/event/service/event_service.dart';
+import 'package:event_mgmt_services_app/providers/event_provider.dart';
+import 'package:event_mgmt_services_app/providers/user_provider.dart';
+import 'package:event_mgmt_services_app/shared/components/cards/current_location.dart';
+import 'package:event_mgmt_services_app/shared/components/cards/event_card.dart';
+import 'package:event_mgmt_services_app/shared/components/cards/main_event_card.dart';
+import 'package:event_mgmt_services_app/shared/components/header/header.dart';
+import 'package:event_mgmt_services_app/shared/components/textfields/location_search_bar.dart';
+import 'package:event_mgmt_services_app/shared/components/texts/section_title.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -161,7 +161,7 @@ class HomePageState extends State<HomePage> {
                                         onTap: () {
                                           final eventProvider =
                                               Provider.of<EventProvider>(context, listen: false);
-                                          eventProvider.setSelectedEvent(events[index]);
+                                          eventProvider.setSelectedEvent(events[index + 1]);
 
                                           Navigator.pushNamed(context, '/event-details');
                                         },

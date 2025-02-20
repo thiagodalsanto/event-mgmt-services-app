@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:calendar_mgmt_services_app/features/event/enum/event_filter.dart';
-import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
+import 'package:event_mgmt_services_app/features/event/enum/event_filter.dart';
+import 'package:event_mgmt_services_app/features/event/models/event_location.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import '../models/event.dart';
@@ -9,8 +9,7 @@ import '../models/event.dart';
 class EventApi {
   static const String _baseUrl = 'https://serpapi.com';
 
-  static const String _apiKey =
-      '13415bf45b4ac899f2809594ebd18215d678b95ddebd1377c2b13038abd38671';
+  static const String _apiKey = '13415bf45b4ac899f2809594ebd18215d678b95ddebd1377c2b13038abd38671';
 
   final Dio dio = Dio();
 
@@ -18,8 +17,7 @@ class EventApi {
     dio.options.baseUrl = _baseUrl;
   }
 
-  Future<List<Event>> getEventsByLocation(Location location,
-      {List<EventFilter>? filters}) async {
+  Future<List<Event>> getEventsByLocation(Location location, {List<EventFilter>? filters}) async {
     final params = {
       'q': 'events',
       'google_domain': 'google.com',
@@ -62,8 +60,7 @@ class EventApi {
 
       if (response.statusCode == 200) {
         final data = response.data as List;
-        final locations =
-            data.map((location) => Location.fromJson(location)).toList();
+        final locations = data.map((location) => Location.fromJson(location)).toList();
         return locations[0];
       } else {
         throw Exception('Falha ao carregar localização');

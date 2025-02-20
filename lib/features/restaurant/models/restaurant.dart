@@ -1,5 +1,5 @@
-import 'package:calendar_mgmt_services_app/features/restaurant/models/business_hours.dart';
-import 'package:calendar_mgmt_services_app/features/restaurant/models/restaurant_location.dart';
+import 'package:event_mgmt_services_app/features/restaurant/models/business_hours.dart';
+import 'package:event_mgmt_services_app/features/restaurant/models/restaurant_location.dart';
 import 'package:flutter/foundation.dart';
 
 class Restaurant {

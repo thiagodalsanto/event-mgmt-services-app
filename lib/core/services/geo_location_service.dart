@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:calendar_mgmt_services_app/core/exceptions/location_disabled.dart';
-import 'package:calendar_mgmt_services_app/core/exceptions/location_permisson_denied.dart';
+import 'package:event_mgmt_services_app/core/exceptions/location_disabled.dart';
+import 'package:event_mgmt_services_app/core/exceptions/location_permisson_denied.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocationService {
@@ -19,8 +19,7 @@ class GeoLocationService {
 
   static Future<bool> userPermittedGeoLocation() async {
     final permission = await Geolocator.checkPermission();
-    return permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always;
+    return permission == LocationPermission.whileInUse || permission == LocationPermission.always;
   }
 
   // Generic method to call the correct platform-specific method
@@ -38,17 +37,14 @@ class GeoLocationService {
   static Future<Position> getLocationAndroid() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw LocationDisabledException(
-          'Location services are disabled on Android.');
+      throw LocationDisabledException('Location services are disabled on Android.');
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        throw LocationPermissionDeniedException(
-            'Location permission denied on Android.');
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        throw LocationPermissionDeniedException('Location permission denied on Android.');
       }
     }
 
@@ -59,8 +55,7 @@ class GeoLocationService {
     );
 
     // Fetch the current position for Android
-    return await Geolocator.getCurrentPosition(
-        locationSettings: locationSettings);
+    return await Geolocator.getCurrentPosition(locationSettings: locationSettings);
   }
 
   // iOS-specific method
@@ -73,10 +68,8 @@ class GeoLocationService {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        throw LocationPermissionDeniedException(
-            'Location permission denied on iOS.');
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        throw LocationPermissionDeniedException('Location permission denied on iOS.');
       }
     }
 

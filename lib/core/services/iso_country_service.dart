@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:calendar_mgmt_services_app/core/models/iso_country.dart';
+import 'package:event_mgmt_services_app/core/models/iso_country.dart';
 import 'package:flutter/services.dart';
 
 class IsoCountryService {
@@ -12,9 +12,8 @@ class IsoCountryService {
       Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       // Convert JSON map to a List of IsoCountry objects
-      List<IsoCountry> countries = jsonMap.entries
-          .map((entry) => IsoCountry.fromJson(entry.key, entry.value))
-          .toList();
+      List<IsoCountry> countries =
+          jsonMap.entries.map((entry) => IsoCountry.fromJson(entry.key, entry.value)).toList();
 
       return countries;
     } catch (e) {

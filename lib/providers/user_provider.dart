@@ -1,4 +1,4 @@
-import 'package:calendar_mgmt_services_app/models/user_model.dart';
+import 'package:event_mgmt_services_app/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';
 
