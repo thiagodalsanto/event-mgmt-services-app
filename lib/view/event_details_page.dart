@@ -110,7 +110,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ? WeatherCard(
                         temperature: '${weather!.temperature}°C',
                         sensation: '${weather!.feelsLike}',
-                        condition: weather!.condition,
+                        condition:
+                            '${weather!.description[0].toUpperCase()}${weather!.description.substring(1)}',
                       )
                     : const Center(child: Text("Previsão do tempo não disponível")),
             const SizedBox(height: 16),
