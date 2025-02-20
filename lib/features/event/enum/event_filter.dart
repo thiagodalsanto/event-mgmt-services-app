@@ -8,7 +8,7 @@ enum EventFilter {
   nextMonth("date:next_month", "Next Month's Events"),
   virtualEvent("event_type:Virtual-Event", "Online Events");
 
-  final String value; //Valor htichips da api SerAPI
+  final String value; 
   final String description;
 
   const EventFilter(this.value, this.description);

@@ -26,22 +26,17 @@ class Restaurant {
   });
 
   static Future<Restaurant> fromJson(Map<String, dynamic> json) async {
-    // Handle location first since it's an async operation
     try {
       RestaurantLocation location = await RestaurantLocation.fromJson(json['location']);
 
-      // Set coordinates if available
       if (json['coordinates'] != null) {
         location.setCoordinates(
             json['coordinates']['latitude'] as double, json['coordinates']['longitude'] as double);
       }
 
-      // Extract categories titles into a list
       List<String> categories =
           (json['categories'] as List).map((category) => category['title'] as String).toList();
 
-      // Get the first business hours entry and its first open slot
-      // Assuming the first entry is the regular hours
       List<dynamic> businessHours = [];
       List<BusinessHours> hours = [];
       if (json['business_hours'] != null && json['business_hours'].length > 0) {

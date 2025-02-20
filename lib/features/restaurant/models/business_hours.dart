@@ -39,7 +39,7 @@ class BusinessHours {
     String formattedEnd =
         '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
     return 'BusinessHours{\n'
-        '  Weekday: ${weekday.toString().split('.').last},\n' // Extracting the name of the Weekday enum value
+        '  Weekday: ${weekday.toString().split('.').last},\n' 
         '  Start: $formattedStart,\n'
         '  End: $formattedEnd\n'
         '}';

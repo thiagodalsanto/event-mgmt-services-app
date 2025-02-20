@@ -46,6 +46,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       final restaurantService = RestaurantService();
 
       final fetchedWeather = await weatherService.getWeather(event.latitude, event.longitude);
+      setState(() {
+        weather = fetchedWeather;
+      });
+
       final fetchedRestaurants =
           await restaurantService.getRestaurantsByCoordinates(event.latitude, event.longitude);
 
@@ -55,7 +59,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       }
 
       setState(() {
-        weather = fetchedWeather;
         restaurant = firstRestaurant;
         isLoading = false;
       });

@@ -94,13 +94,10 @@ class EventApi {
 
   Future<List<Location>> getLocationListByJson() async {
     try {
-      // Load the JSON file from assets
       String jsonString = await rootBundle.loadString('lib/assets/locations.json');
 
-      // Decode JSON into a List
       List<dynamic> jsonList = json.decode(jsonString);
 
-      // Convert to List<Location>
       return jsonList.map((item) => Location.fromJson(item)).toList();
     } catch (e) {
       throw Exception("Error loading locations: $e");

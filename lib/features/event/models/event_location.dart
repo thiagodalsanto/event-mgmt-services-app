@@ -20,7 +20,7 @@ class Location {
   });
 
   factory Location.fromJson(Map<String, dynamic> json) {
-    List<dynamic>? gpsData = json['gps']; // Some entries don't have 'gps'
+    List<dynamic>? gpsData = json['gps'];
     return Location(
       id: json['id'],
       name: json['name'],
@@ -28,8 +28,8 @@ class Location {
       countryCode: json['country_code'],
       targetType: json['target_type'],
       reach: json['reach'],
-      latitude: gpsData != null ? (gpsData[1] as num).toDouble() : 0.0, // Latitude is second
-      longitude: gpsData != null ? (gpsData[0] as num).toDouble() : 0.0, // Longitude is first
+      latitude: gpsData != null ? (gpsData[1] as num).toDouble() : 0.0, 
+      longitude: gpsData != null ? (gpsData[0] as num).toDouble() : 0.0,
     );
   }
 
