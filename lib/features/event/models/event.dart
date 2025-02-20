@@ -37,7 +37,7 @@ class Event {
   String toString() {
     return 'Event{\n'
         '  title: $title,\n'
-        '  date: ${date.toString()},\n'  // Calls the toString of EventDate here
+        '  date: ${date.toString()},\n'  
         '  address: $address,\n'
         '  link: $link,\n'
         '  thumbnail: $thumbnail,\n'

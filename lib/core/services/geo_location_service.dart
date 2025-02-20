@@ -4,12 +4,10 @@ import 'package:calendar_mgmt_services_app/core/exceptions/location_permisson_de
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocationService {
-  // Check if location services are enabled
   static Future<bool> isLocationEnabled() async {
     return await Geolocator.isLocationServiceEnabled();
   }
 
-  // Request location permission
   static Future<LocationPermission> requestPermission() async {
     if (await GeoLocationService.userPermittedGeoLocation()) {
       return await Geolocator.checkPermission();
@@ -23,7 +21,6 @@ class GeoLocationService {
         permission == LocationPermission.always;
   }
 
-  // Generic method to call the correct platform-specific method
   static Future<Position> getCurrentLocation() async {
     if (Platform.isAndroid) {
       return await getLocationAndroid();
@@ -34,7 +31,6 @@ class GeoLocationService {
     }
   }
 
-  // Android-specific method
   static Future<Position> getLocationAndroid() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -52,18 +48,15 @@ class GeoLocationService {
       }
     }
 
-    // Android-specific location settings
     LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10, // Adjust the distance filter as needed
+      distanceFilter: 10,
     );
 
-    // Fetch the current position for Android
     return await Geolocator.getCurrentPosition(
         locationSettings: locationSettings);
   }
 
-  // iOS-specific method
   static Future<Position> getLocationIOS() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -80,13 +73,11 @@ class GeoLocationService {
       }
     }
 
-    // iOS-specific location settings
     AppleSettings appleSettings = AppleSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10, // Adjust the distance filter as needed
+      distanceFilter: 10,
     );
 
-    // Fetch the current position for iOS
     return await Geolocator.getCurrentPosition(locationSettings: appleSettings);
   }
 }

@@ -22,9 +22,8 @@ class GoogleMaps {
   }
 
   factory GoogleMaps.fromJson(Map<String, dynamic> json) {
-    var result = json['results'][0]; // Pega o primeiro resultado
+    var result = json['results'][0]; 
 
-    // Itera pelos componentes do endereço para achar cidade, estado e país
     String? city;
     String? state;
     String? country;
@@ -46,12 +45,10 @@ class GoogleMaps {
       }
     }
 
-    // Extrai a latitude e longitude
     var location = result['geometry']['location'];
     double lat = location['lat'];
     double lng = location['lng'];
 
-    // Retorna o objeto preenchido
     return GoogleMaps(
       address: result['formatted_address'],
       city: city ?? 'Unknown',
