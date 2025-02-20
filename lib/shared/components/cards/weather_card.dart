@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class WeatherCard extends StatelessWidget {
   final String temperature;
+  final String sensation;
   final String condition;
 
   const WeatherCard({
     super.key,
     required this.temperature,
+    required this.sensation,
     required this.condition,
   });
 
@@ -31,7 +33,9 @@ class WeatherCard extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Temperatura: $temperature', style: const TextStyle(fontSize: 16)),
+                  Text('Temperatura Prevista: $temperature', style: const TextStyle(fontSize: 16)),
+                  const SizedBox(height: 4),
+                  Text('Sensação: $sensation', style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 4),
                   Text('Condição: $condition', style: const TextStyle(fontSize: 16)),
                 ],

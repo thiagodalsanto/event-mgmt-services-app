@@ -10,8 +10,8 @@ class Restaurant {
   final String url;
   final String phone;
   final double distance;
-  final List<BusinessHours>? hours;
   final String menuUrl;
+  List<BusinessHours>? hours;
 
   Restaurant({
     required this.name,

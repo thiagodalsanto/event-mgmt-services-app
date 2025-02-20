@@ -51,7 +51,6 @@ class UserProvider with ChangeNotifier {
 
   Future<void> updateUser({
     required String newPassword,
-    required String newLocalization,
   }) async {
     if (_user == null) return;
 
@@ -59,7 +58,6 @@ class UserProvider with ChangeNotifier {
       name: _user!.name,
       email: _user!.email,
       password: newPassword.isNotEmpty ? newPassword : _user!.password,
-      localization: newLocalization.isNotEmpty ? newLocalization : _user!.localization,
     );
 
     _user = updatedUser;

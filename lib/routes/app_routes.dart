@@ -12,8 +12,7 @@ class AppRoutes {
       case RouteNames.home:
         return MaterialPageRoute(builder: (_) => HomePage());
       case RouteNames.eventDetails:
-        final Map<String, String> evento = settings.arguments as Map<String, String>;
-        return MaterialPageRoute(builder: (_) => EventDetailsPage(evento: evento));
+        return MaterialPageRoute(builder: (_) => EventDetailsPage());
       case RouteNames.login:
         return MaterialPageRoute(builder: (_) => LoginPage());
       case RouteNames.register:

@@ -1,7 +1,7 @@
-import 'package:calendar_mgmt_services_app/core/services/geo_location_service.dart';
 import 'package:calendar_mgmt_services_app/features/event/models/event.dart';
 import 'package:calendar_mgmt_services_app/features/event/models/event_location.dart';
 import 'package:calendar_mgmt_services_app/features/event/service/event_service.dart';
+import 'package:calendar_mgmt_services_app/providers/event_provider.dart';
 import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
 import 'package:calendar_mgmt_services_app/shared/components/cards/current_location.dart';
 import 'package:calendar_mgmt_services_app/shared/components/cards/event_card.dart';
@@ -37,7 +37,6 @@ class HomePageState extends State<HomePage> {
   Future<void> _fetchEvents({String? searchQuery}) async {
     try {
       final eventService = EventService();
-      await GeoLocationService.requestPermission();
       Location? location;
 
       if (searchQuery != null && searchQuery.isNotEmpty) {
@@ -55,14 +54,24 @@ class HomePageState extends State<HomePage> {
             reach: 0,
           ),
         );
-      } else if (await GeoLocationService.userPermittedGeoLocation()) {
-        events = await eventService.getEventsByGeoLocation();
       } else {
         final locations = await eventService.getLocationsByJson();
-        location = locations.firstWhere((loc) => loc.id == '585069abee19ad271e9b727d');
+        location = locations.firstWhere(
+          (loc) => loc.id == '585069abee19ad271e9b727d',
+          orElse: () => Location(
+            id: '',
+            name: '',
+            latitude: 0.0,
+            longitude: 0.0,
+            canonicalName: '',
+            countryCode: '',
+            targetType: '',
+            reach: 0,
+          ),
+        );
       }
 
-      if (location != null && location.id.isNotEmpty) {
+      if (location.id.isNotEmpty) {
         events = await eventService.getEventsByLocation(location);
         currentLocationName = location.name;
       }
@@ -88,8 +97,6 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final user = userProvider.user;
-
-    print(events);
 
     return Scaffold(
       body: Container(
@@ -132,13 +139,11 @@ class HomePageState extends State<HomePage> {
                                   titulo: events[0].title,
                                   imagem: events[0].thumbnail,
                                   onTap: () {
-                                    Navigator.pushNamed(context, '/event-details', arguments: {
-                                      'titulo': events[0].title,
-                                      'descricao': events[0].date.when,
-                                      'imagem': events[0].thumbnail,
-                                      'endereco': events[0].address.join(', '),
-                                      'link': events[0].link,
-                                    });
+                                    final eventProvider =
+                                        Provider.of<EventProvider>(context, listen: false);
+                                    eventProvider.setSelectedEvent(events[0]);
+
+                                    Navigator.pushNamed(context, '/event-details');
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -154,17 +159,11 @@ class HomePageState extends State<HomePage> {
                                         descricao: evento.date.when,
                                         imagem: evento.thumbnail,
                                         onTap: () {
-                                          Navigator.pushNamed(
-                                            context,
-                                            '/event-details',
-                                            arguments: {
-                                              'titulo': evento.title,
-                                              'descricao': evento.date.when,
-                                              'imagem': evento.thumbnail,
-                                              'endereco': evento.address.join(', '),
-                                              'link': evento.link,
-                                            },
-                                          );
+                                          final eventProvider =
+                                              Provider.of<EventProvider>(context, listen: false);
+                                          eventProvider.setSelectedEvent(events[index]);
+
+                                          Navigator.pushNamed(context, '/event-details');
                                         },
                                       );
                                     },

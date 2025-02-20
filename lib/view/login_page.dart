@@ -94,7 +94,7 @@ class LoginPageState extends State<LoginPage> {
                   icon: Icons.lock,
                   focusNode: _senhaFocusNode,
                   isPassword: true,
-                  isPasswordVisible: _isPasswordVisible,
+                  isPasswordVisible: !_isPasswordVisible,
                   onPasswordVisibilityChanged: () {
                     setState(() {
                       _isPasswordVisible = !_isPasswordVisible;

@@ -17,17 +17,15 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
   final TextEditingController confirmarSenhaController = TextEditingController();
-  final TextEditingController localController = TextEditingController();
 
   final FocusNode _nomeFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _senhaFocusNode = FocusNode();
   final FocusNode _confirmarSenhaFocusNode = FocusNode();
-  final FocusNode _localFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _isPasswordVisible = false;
+  bool _isPasswordVisible = true;
 
   @override
   void initState() {
@@ -36,7 +34,6 @@ class RegisterPageState extends State<RegisterPage> {
     _emailFocusNode.unfocus();
     _senhaFocusNode.unfocus();
     _confirmarSenhaFocusNode.unfocus();
-    _localFocusNode.unfocus();
   }
 
   @override
@@ -45,7 +42,6 @@ class RegisterPageState extends State<RegisterPage> {
     _emailFocusNode.dispose();
     _senhaFocusNode.dispose();
     _confirmarSenhaFocusNode.dispose();
-    _localFocusNode.dispose();
     super.dispose();
   }
 
@@ -104,7 +100,6 @@ class RegisterPageState extends State<RegisterPage> {
         name: nomeController.text,
         email: email,
         password: senhaController.text,
-        localization: localController.text,
       );
 
       await usersBox.put(email, newUser.toMap());
@@ -200,15 +195,6 @@ class RegisterPageState extends State<RegisterPage> {
                           _isPasswordVisible = !_isPasswordVisible;
                         });
                       },
-                    ),
-                    const SizedBox(height: 15),
-                    CustomTextField(
-                      controller: localController,
-                      label: "Localização",
-                      icon: Icons.location_on,
-                      isPassword: false,
-                      focusNode: _localFocusNode,
-                      validator: (value) => _validateField(value, 'sua localização'),
                     ),
                     const SizedBox(height: 25),
                     CustomButton(

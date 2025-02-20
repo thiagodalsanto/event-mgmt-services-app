@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+import 'package:calendar_mgmt_services_app/providers/event_provider.dart';
 import 'package:calendar_mgmt_services_app/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';
@@ -15,6 +16,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => EventProvider())
       ],
       child: const MyApp(),
     ),

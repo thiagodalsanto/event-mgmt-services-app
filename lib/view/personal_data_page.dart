@@ -18,7 +18,6 @@ class PersonalDataPageState extends State<PersonalDataPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
   final TextEditingController confirmarSenhaController = TextEditingController();
-  final TextEditingController localController = TextEditingController();
 
   bool _isPasswordVisible = false;
 
@@ -27,7 +26,6 @@ class PersonalDataPageState extends State<PersonalDataPage> {
     if (user != null) {
       nomeController.text = user.name;
       emailController.text = user.email;
-      localController.text = user.localization;
     }
   }
 
@@ -81,21 +79,6 @@ class PersonalDataPageState extends State<PersonalDataPage> {
                     icon: Icons.email,
                     isPassword: false,
                     isReadOnly: true,
-                    isPasswordVisible: _isPasswordVisible,
-                    onPasswordVisibilityChanged: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  const SectionTitle(title: "Localização"),
-                  CustomTextField(
-                    controller: localController,
-                    label: "Localização",
-                    icon: Icons.location_on,
-                    isPassword: false,
-                    isReadOnly: false,
                     isPasswordVisible: _isPasswordVisible,
                     onPasswordVisibilityChanged: () {
                       setState(() {
