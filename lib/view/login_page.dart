@@ -1,6 +1,9 @@
 import 'package:event_mgmt_services_app/providers/user_provider.dart';
+import 'package:event_mgmt_services_app/routes/route_names.dart';
 import 'package:event_mgmt_services_app/shared/components/buttons/custom_elevated_button.dart';
 import 'package:event_mgmt_services_app/shared/components/buttons/custom_text_button.dart';
+import 'package:event_mgmt_services_app/shared/components/notifications/error_notification.dart';
+import 'package:event_mgmt_services_app/shared/components/notifications/success_notifications.dart';
 import 'package:event_mgmt_services_app/shared/components/textfields/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +20,25 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController senhaController = TextEditingController();
 
   bool _isPasswordVisible = false;
-
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _senhaFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfUserIsLoggedIn();
+  }
+
+  Future<void> _checkIfUserIsLoggedIn() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.isLoggedIn == true) {
+      Future.microtask(() {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, RouteNames.home);
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -36,15 +55,11 @@ class LoginPageState extends State<LoginPage> {
     try {
       await userProvider.loginUser(email, password);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login bem-sucedido!')),
-      );
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, RouteNames.home);
+      showSuccessNotification(context, "Login efetuado com sucesso!");
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      showErrorNotification(context, "Erro ao efetuar login!");
     }
   }
 
@@ -54,7 +69,7 @@ class LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
+            colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -114,7 +129,7 @@ class LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     _emailFocusNode.unfocus();
                     _senhaFocusNode.unfocus();
-                    Navigator.pushNamed(context, '/register');
+                    Navigator.pushNamed(context, RouteNames.register);
                   },
                   textColor: Colors.white,
                   fontSize: 16,

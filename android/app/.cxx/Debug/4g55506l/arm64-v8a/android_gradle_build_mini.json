@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/thiago-silicon/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/thiago-silicon/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/thiago-silicon/Documentos/AMS/event-mgmt-services-app/android/app/.cxx/Debug/4g55506l/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/thiago-silicon/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/thiago-silicon/Documentos/AMS/event-mgmt-services-app/android/app/.cxx/Debug/4g55506l/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

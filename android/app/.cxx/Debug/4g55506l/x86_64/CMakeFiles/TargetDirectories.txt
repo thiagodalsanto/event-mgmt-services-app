@@ -1,0 +1,2 @@
+/home/thiago-silicon/Documentos/AMS/event-mgmt-services-app/android/app/.cxx/Debug/4g55506l/x86_64/CMakeFiles/edit_cache.dir
+/home/thiago-silicon/Documentos/AMS/event-mgmt-services-app/android/app/.cxx/Debug/4g55506l/x86_64/CMakeFiles/rebuild_cache.dir

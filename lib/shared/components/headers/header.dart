@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class Header extends StatelessWidget {
   final String title;
   final VoidCallback onSettingsPressed;
+  final VoidCallback onLogoutPressed;
 
   const Header({
     super.key,
     required this.title,
     required this.onSettingsPressed,
+    required this.onLogoutPressed,
   });
 
   @override
@@ -23,9 +25,17 @@ class Header extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.settings, color: Colors.white),
-          onPressed: onSettingsPressed,
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onPressed: onSettingsPressed,
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: onLogoutPressed,
+            ),
+          ],
         ),
       ],
     );

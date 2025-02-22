@@ -6,8 +6,8 @@ import 'package:event_mgmt_services_app/features/weather/service/weather_service
 import 'package:event_mgmt_services_app/providers/event_provider.dart';
 import 'package:event_mgmt_services_app/shared/components/cards/event_image.dart';
 import 'package:event_mgmt_services_app/shared/components/cards/event_info.dart';
-import 'package:event_mgmt_services_app/shared/components/cards/restaurant_card.dart';
 import 'package:event_mgmt_services_app/shared/components/cards/weather_card.dart';
+import 'package:event_mgmt_services_app/shared/components/lists/restaurant_list_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +22,9 @@ class EventDetailsPage extends StatefulWidget {
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
   Weather? weather;
-  Restaurant? restaurant;
-  bool isLoading = true;
+  List<Restaurant?>? restaurant;
+  bool isLoadingRestaurants = true;
+  bool isLoadingWeather = true;
 
   @override
   void initState() {
@@ -34,7 +35,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         _fetchWeatherAndRestaurant(eventProvider.selectedEvent!);
       } else {
         setState(() {
-          isLoading = false;
+          isLoadingRestaurants = false;
+          isLoadingWeather = false;
         });
       }
     });
@@ -48,26 +50,27 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       final fetchedWeather = await weatherService.getWeather(event.latitude, event.longitude);
       setState(() {
         weather = fetchedWeather;
+        isLoadingWeather = false;
       });
 
-      final fetchedRestaurants =
-          await restaurantService.getRestaurantsByCoordinates(event.latitude, event.longitude);
+      final fetchedRestaurants = await restaurantService.getRestaurantsByCoordinates(event.latitude, event.longitude);
 
-      Restaurant? firstRestaurant;
+      List<Restaurant?>? firstRestaurant;
       if (fetchedRestaurants.isNotEmpty) {
-        firstRestaurant = fetchedRestaurants.first;
+        firstRestaurant = fetchedRestaurants;
       }
 
       setState(() {
         restaurant = firstRestaurant;
-        isLoading = false;
+        isLoadingRestaurants = false;
       });
     } catch (e) {
       if (kDebugMode) {
         print("Erro ao buscar informações: $e");
       }
       setState(() {
-        isLoading = false;
+        isLoadingWeather = false;
+        isLoadingRestaurants = false;
       });
     }
   }
@@ -90,41 +93,62 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            EventImage(
-              imageUrl: event.thumbnail,
-              title: event.title,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    EventImage(imageUrl: event.thumbnail, title: event.title),
+                    isLoadingRestaurants
+                        ? SizedBox(
+                            width: double.infinity,
+                            height: 145,
+                            child: const Center(child: CircularProgressIndicator(color: Colors.white)),
+                          )
+                        : SizedBox(
+                            width: double.infinity,
+                            height: 145,
+                            child: weather != null
+                                ? WeatherCard(
+                                    temperature: '${weather!.temperature}°C',
+                                    sensation: '${weather!.feelsLike}',
+                                    condition:
+                                        '${weather!.description[0].toUpperCase()}${weather!.description.substring(1)}',
+                                    realCondition: weather!.condition,
+                                  )
+                                : const Center(child: Text("Previsão do tempo não disponível")),
+                          ),
+                    EventInfo(
+                      description: event.address[0],
+                      eventDate: DateFormat('dd/MM/yyyy').format(event.date.start),
+                      eventLink: event.link,
+                    ),
+                    const SizedBox(height: 20),
+                    isLoadingRestaurants
+                        ? SizedBox(
+                            width: double.infinity,
+                            height: 145,
+                            child: const Center(child: CircularProgressIndicator(color: Colors.white)),
+                          )
+                        : restaurant != null
+                            ? RestaurantListView(restaurants: restaurant)
+                            : const Center(child: Text("Nenhum restaurante encontrado")),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
             ),
-            EventInfo(
-              description: event.address[0],
-              eventDate: DateFormat('dd/MM/yyyy').format(event.date.start),
-              eventLink: event.link,
-            ),
-            const SizedBox(height: 20),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : weather != null
-                    ? WeatherCard(
-                        temperature: '${weather!.temperature}°C',
-                        sensation: '${weather!.feelsLike}',
-                        condition:
-                            '${weather!.description[0].toUpperCase()}${weather!.description.substring(1)}',
-                      )
-                    : const Center(child: Text("Previsão do tempo não disponível")),
-            const SizedBox(height: 16),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : restaurant != null
-                    ? RestaurantCard(
-                        name: restaurant!.name,
-                        type: restaurant!.categories.join(', '),
-                        address: restaurant!.location.address,
-                      )
-                    : const Center(child: Text("Nenhum restaurante encontrado")),
-            const SizedBox(height: 30),
           ],
         ),
       ),

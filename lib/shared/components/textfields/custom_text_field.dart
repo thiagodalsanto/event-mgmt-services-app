@@ -11,6 +11,8 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final VoidCallback? onPasswordVisibilityChanged;
   final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
+  final BorderRadius? borderRadius;
 
   const CustomTextField({
     super.key,
@@ -24,6 +26,8 @@ class CustomTextField extends StatelessWidget {
     this.isPasswordVisible = false,
     this.onPasswordVisibilityChanged,
     this.onFieldSubmitted,
+    this.onChanged,
+    this.borderRadius,
   });
 
   @override
@@ -35,6 +39,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       obscureText: isPassword ? isPasswordVisible : false,
       readOnly: isReadOnly,
+      onChanged: onChanged,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
@@ -43,7 +48,7 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         fillColor: Colors.white.withAlpha(51),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: borderRadius ?? BorderRadius.circular(25),
           borderSide: BorderSide.none,
         ),
         suffixIcon: isPassword

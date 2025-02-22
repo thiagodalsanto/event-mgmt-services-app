@@ -1,9 +1,10 @@
-import 'package:event_mgmt_services_app/models/user_model.dart';
 import 'package:event_mgmt_services_app/shared/components/buttons/custom_elevated_button.dart';
 import 'package:event_mgmt_services_app/shared/components/buttons/custom_text_button.dart';
-import 'package:event_mgmt_services_app/shared/components/textfields/custom_text_field.dart';
+import 'package:event_mgmt_services_app/shared/components/forms/register_form.dart';
+import 'package:event_mgmt_services_app/shared/components/headers/register_header.dart';
+import 'package:event_mgmt_services_app/utils/register_user.dart';
+import 'package:event_mgmt_services_app/utils/register_validations.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -13,105 +14,36 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
-  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController senhaController = TextEditingController();
-  final TextEditingController confirmarSenhaController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
-  final FocusNode _nomeFocusNode = FocusNode();
+  final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _senhaFocusNode = FocusNode();
-  final FocusNode _confirmarSenhaFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyRegister = GlobalKey<FormState>();
 
-  bool _isPasswordVisible = true;
+  final ValueNotifier<bool> _isPasswordVisible = ValueNotifier(true);
 
   @override
   void initState() {
     super.initState();
-    _nomeFocusNode.unfocus();
+    _nameFocusNode.unfocus();
     _emailFocusNode.unfocus();
-    _senhaFocusNode.unfocus();
-    _confirmarSenhaFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+    _confirmPasswordFocusNode.unfocus();
   }
 
   @override
   void dispose() {
-    _nomeFocusNode.dispose();
+    _nameFocusNode.dispose();
     _emailFocusNode.dispose();
-    _senhaFocusNode.dispose();
-    _confirmarSenhaFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Por favor, insira um e-mail';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Por favor, insira um e-mail válido';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Por favor, insira uma senha';
-    }
-    if (value.length < 6) {
-      return 'A senha deve ter pelo menos 6 caracteres';
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Por favor, confirme sua senha';
-    }
-    if (value != senhaController.text) {
-      return 'As senhas não coincidem';
-    }
-    return null;
-  }
-
-  String? _validateField(String? value, String fieldName) {
-    if (value == null || value.isEmpty) {
-      return 'Por favor, insira $fieldName';
-    }
-    return null;
-  }
-
-  void _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      final usersBox = Hive.box('users');
-      final email = emailController.text;
-
-      final userExists = usersBox.containsKey(email);
-
-      if (userExists) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Este e-mail já está em uso')),
-        );
-        return;
-      }
-
-      final newUser = User(
-        name: nomeController.text,
-        email: email,
-        password: senhaController.text,
-      );
-
-      await usersBox.put(email, newUser.toMap());
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registro realizado com sucesso!')),
-      );
-
-      Navigator.pop(context);
-    }
   }
 
   @override
@@ -120,7 +52,7 @@ class RegisterPageState extends State<RegisterPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
+            colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -129,91 +61,56 @@ class RegisterPageState extends State<RegisterPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.person_add,
-                      size: 80,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Crie sua Conta",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    CustomTextField(
-                      controller: nomeController,
-                      label: "Nome Completo",
-                      icon: Icons.person,
-                      isPassword: false,
-                      focusNode: _nomeFocusNode,
-                      validator: (value) => _validateField(value, 'seu nome'),
-                    ),
-                    const SizedBox(height: 15),
-                    CustomTextField(
-                      controller: emailController,
-                      label: "E-mail",
-                      icon: Icons.email,
-                      isPassword: false,
-                      focusNode: _emailFocusNode,
-                      validator: _validateEmail,
-                    ),
-                    const SizedBox(height: 15),
-                    CustomTextField(
-                      controller: senhaController,
-                      label: "Senha",
-                      icon: Icons.lock,
-                      focusNode: _senhaFocusNode,
-                      validator: _validatePassword,
-                      isPassword: true,
-                      isPasswordVisible: _isPasswordVisible,
-                      onPasswordVisibilityChanged: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    CustomTextField(
-                      controller: confirmarSenhaController,
-                      label: "Confirmar Senha",
-                      icon: Icons.lock,
-                      focusNode: _confirmarSenhaFocusNode,
-                      validator: _validateConfirmPassword,
-                      isPassword: true,
-                      isPasswordVisible: _isPasswordVisible,
-                      onPasswordVisibilityChanged: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 25),
-                    CustomButton(
-                      text: "Cadastrar",
-                      onPressed: _registerUser,
-                      backgroundColor: Colors.white,
-                      textColor: const Color(0xFF2575FC),
-                    ),
-                    const SizedBox(height: 15),
-                    CustomTextButton(
-                      text: "Já tem uma conta? Faça login",
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      textColor: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ],
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RegisterHeader(title: 'Crie sua conta'),
+                  const SizedBox(height: 30),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: _isPasswordVisible,
+                    builder: (context, isPasswordVisible, child) {
+                      return RegisterForm(
+                        nameController: nameController,
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        confirmPasswordController: confirmPasswordController,
+                        formKey: _formKeyRegister,
+                        validatePassword: (value) => validatePassword(passwordController.text),
+                        validateConfirmPassword: (value) =>
+                            validateConfirmPassword(value, confirmPasswordController.text),
+                        validateEmail: (value) => validateEmail(emailController.text),
+                        validateName: (value) => validateField(value, nameController.text),
+                        nameFocusNode: _nameFocusNode,
+                        emailFocusNode: _emailFocusNode,
+                        passwordFocusNode: _passwordFocusNode,
+                        confirmPasswordFocusNode: _confirmPasswordFocusNode,
+                        isPasswordVisible: isPasswordVisible,
+                        onPasswordVisibilityChanged: () {
+                          _isPasswordVisible.value = !_isPasswordVisible.value;
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  CustomButton(
+                    text: "Cadastrar",
+                    onPressed: () async {
+                      await registerUser(
+                          context, _formKeyRegister, nameController, emailController, passwordController);
+                    },
+                    backgroundColor: Colors.white,
+                    textColor: const Color(0xFF2C3E50),
+                  ),
+                  const SizedBox(height: 15),
+                  CustomTextButton(
+                    text: "Já tem uma conta? Faça login",
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    textColor: Colors.white,
+                    fontSize: 16,
+                  ),
+                ],
               ),
             ),
           ),

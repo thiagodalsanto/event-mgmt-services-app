@@ -1,4 +1,4 @@
-# calendar_mgmt_services_app
+# event_mgmt_services_app
 
 A new Flutter project.
 

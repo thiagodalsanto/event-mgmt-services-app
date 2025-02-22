@@ -6,18 +6,29 @@ class UserProvider with ChangeNotifier {
   User? _user;
 
   User? get user => _user;
+  bool get isLoggedIn => _user != null;
 
-  Future<void> loadUserFromCache() async {
+  UserProvider() {
+    tryAutoLogin();
+  }
+
+  Future<void> tryAutoLogin() async {
     var box = await Hive.openBox('users');
     var cacheBox = await Hive.openBox('cache');
 
     final String? emailLogado = cacheBox.get('loggedUserEmail');
 
     if (emailLogado != null && box.containsKey(emailLogado)) {
-      final userData = Map<String, dynamic>.from(box.get(emailLogado) as Map);
-      _user = User.fromMap(userData);
-      notifyListeners();
+      final userData = box.get(emailLogado);
+      if (userData != null) {
+        _user = User.fromMap(Map<String, dynamic>.from(userData as Map));
+        notifyListeners();
+        return;
+      }
     }
+
+    _user = null;
+    notifyListeners();
   }
 
   Future<void> loginUser(String email, String password) async {
@@ -45,6 +56,7 @@ class UserProvider with ChangeNotifier {
   Future<void> logoutUser() async {
     var cacheBox = await Hive.openBox('cache');
     await cacheBox.delete('loggedUserEmail');
+
     _user = null;
     notifyListeners();
   }

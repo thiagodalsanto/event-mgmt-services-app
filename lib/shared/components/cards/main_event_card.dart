@@ -30,21 +30,14 @@ class MainEventCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Positioned(
-                bottom: 10,
-                left: 10,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    titulo,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                bottom: 12,
+                left: 16,
+                child: Text(
+                  titulo,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

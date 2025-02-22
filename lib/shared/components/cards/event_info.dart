@@ -46,13 +46,12 @@ class EventInfo extends StatelessWidget {
             children: [
               Text(
                 'Endereço:',
-                style:
-                    const TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.justify,
               ),
               Text(
                 description,
-                style: const TextStyle(fontSize: 16.0, color: Colors.black87),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white),
                 textAlign: TextAlign.justify,
               ),
             ],
@@ -64,13 +63,12 @@ class EventInfo extends StatelessWidget {
             children: [
               Text(
                 'Data:',
-                style:
-                    const TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.justify,
               ),
               Text(
                 _formatDate(eventDate),
-                style: const TextStyle(fontSize: 16.0, color: Colors.black87),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white),
                 textAlign: TextAlign.justify,
               ),
             ],
@@ -82,8 +80,7 @@ class EventInfo extends StatelessWidget {
             children: [
               Text(
                 'Acesso:',
-                style:
-                    const TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.justify,
               ),
               GestureDetector(
@@ -92,7 +89,7 @@ class EventInfo extends StatelessWidget {
                   eventLink,
                   style: const TextStyle(
                     fontSize: 16.0,
-                    color: Colors.blue,
+                    color: Colors.white,
                     decoration: TextDecoration.underline,
                   ),
                   textAlign: TextAlign.justify,

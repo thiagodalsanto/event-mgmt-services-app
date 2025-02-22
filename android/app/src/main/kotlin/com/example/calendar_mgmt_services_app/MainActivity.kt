@@ -1,4 +1,4 @@
-package com.example.calendar_mgmt_services_app
+package com.example.event_mgmt_services_app
 
 import io.flutter.embedding.android.FlutterActivity
 
