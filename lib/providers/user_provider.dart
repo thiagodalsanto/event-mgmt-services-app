@@ -35,7 +35,10 @@ class UserProvider with ChangeNotifier {
     var box = await Hive.openBox('users');
     var cacheBox = await Hive.openBox('cache');
 
-    final userData = box.get(email);
+    final userData = box.values.firstWhere(
+      (user) => user['name'] == email || user['email'] == email,
+      orElse: () => null,
+    );
 
     if (userData == null) {
       throw Exception("E-mail não cadastrado");

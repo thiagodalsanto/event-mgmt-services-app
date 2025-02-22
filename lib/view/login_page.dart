@@ -48,12 +48,10 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _loginUser() async {
-    final email = emailController.text;
-    final password = senhaController.text;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
-      await userProvider.loginUser(email, password);
+      await userProvider.loginUser(emailController.text, senhaController.text);
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, RouteNames.home);
       showSuccessNotification(context, "Login efetuado com sucesso!");

@@ -96,7 +96,7 @@ class RegisterPageState extends State<RegisterPage> {
                     text: "Cadastrar",
                     onPressed: () async {
                       await registerUser(
-                          context, _formKeyRegister, nameController, emailController, passwordController);
+                          context, _formKeyRegister, emailController, nameController, passwordController);
                     },
                     backgroundColor: Colors.white,
                     textColor: const Color(0xFF2C3E50),

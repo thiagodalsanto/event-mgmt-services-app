@@ -22,7 +22,7 @@ String? validateConfirmPassword(String? value, senhaController) {
   if (value == null || value.isEmpty) {
     return 'Por favor, confirme sua senha';
   }
-  if (value != senhaController.text) {
+  if (value != senhaController) {
     return 'As senhas não coincidem';
   }
   return null;
