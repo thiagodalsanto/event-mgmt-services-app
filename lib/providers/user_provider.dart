@@ -36,7 +36,7 @@ class UserProvider with ChangeNotifier {
     var cacheBox = await Hive.openBox('cache');
 
     final userData = box.values.firstWhere(
-      (user) => user['name'] == email || user['email'] == email,
+      (user) => user['email'] == email,
       orElse: () => null,
     );
 
