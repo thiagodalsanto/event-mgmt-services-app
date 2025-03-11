@@ -1,16 +1,16 @@
-# event_mgmt_services_app
+# Ciclo do App
 
-A new Flutter project.
+O utilizador inicia sua jornada no aplicativo criando uma conta e acessando com suas credenciais. Após o login, ele pode pesquisar por cidades ao redor do mundo para descobrir eventos programados para os próximos dias.  
 
-## Getting Started
+Ao selecionar uma cidade, o aplicativo exibe uma lista de eventos disponíveis, permitindo que o usuário explore opções de acordo com seu interesse. Quando um evento específico é escolhido, o app fornece detalhes completos, incluindo informações sobre o local e data. Além disso, o utilizador recebe a previsão do tempo para o dia do evento e recomendações de restaurantes próximos, facilitando seu planejamento e melhorando sua experiência.
 
-This project is a starting point for a Flutter application.
+## Serviços
+Foram consumidos três APIs em forma de serviço e utilizados no App:
+- SerpAPI: Retorno de eventos para a localização
+- WeatherAPI: Clima e tempo para o dia do evento
+- Yelp: Restaurante próximos ao evento
 
-A few resources to get you started if this is your first Flutter project:
+## Demo de Funcionamento
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![Demo do App](demo/demo.gif)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
